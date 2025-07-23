@@ -29,8 +29,8 @@ const App: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const languageOptions = [
-    'Hindi', 'Punjabi', 'Khasi', 'Garo', 'Marathi', 'Kokborok',
-    'Spanish', 'French', 'German', 'Bengali', 'Tamil', 'Telugu'
+    'Hindi', 'Punjabi', 'Khasi', 'Garo', 'Marathi', 'Kokborok', 'Gujrati', 'Bengali', 'Tamil', 'Telugu',
+    'Spanish', 'French', 'German', 'Vietnamese', 'Japanese'
   ];
 
   useEffect(() => {
