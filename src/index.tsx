@@ -265,7 +265,10 @@ const App: React.FC = () => {
                 <p><strong>Exception:</strong> {result.exception || 'N/A'}</p>
               </div>
             ) : (
-              <p className="text-black-500">Click 'Identify Image' to see results.</p>
+              <p className="text-black-500 italic">
+                Click <span className="font-semibold text-[#00AEEF]">'Identify Image'</span> to see results.
+              </p>
+
             )}
           </div>
         </div>
