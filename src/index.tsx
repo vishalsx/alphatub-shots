@@ -151,13 +151,16 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-gray-100 font-sans antialiased">
-      <header className="py-6 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-teal-400 text-center tracking-wide animate-fade-in">
-          alphaTUB - TUBShots with AI
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#FFFFFF] via-[#E6F7FC] to-[#FDE6E0] text-gray-900 font-sans antialiased">
+      <header className="py-6 px-4 sm:px-6 lg:px-8 flex justify-center">
+        <div className="p-2 rounded-lg bg-gradient-to-r from-[#E6F7FC] to-[#FDE6E0] shadow-md">
+          <img
+            src="/AlphaTub_logo.jpeg"
+            alt="alphaTUB - TUBShots with AI"
+            className="h-16 sm:h-20 object-contain"
+          />
+        </div>
       </header>
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Image Upload Section */}
@@ -168,11 +171,12 @@ const App: React.FC = () => {
               onDrop={handleDrop}
               onClick={handleClick}
             >
-              <p className="text-gray-300 font-medium">
-                Drag and drop an image or click to upload
-              </p>
+            <p className="text-4xl font-extrabold tracking-wide text-[#00AEEF] drop-shadow-[0_0_8px_rgba(0,174,239,0.6)]">
+              Take <span className="text-[#F15A29] drop-shadow-[0_0_8px_rgba(241,90,41,0.6)]">Tub</span>
+              <span className="text-[#00AEEF]">Shot</span>
+            </p>
               <p className="text-sm text-gray-400 mt-1">
-                Supported formats: jpg, jpeg, png, heic, heif, webp, gif, bmp, tiff
+                Drag and drop an image or click to upload 
               </p>
               <input
                 type="file"
@@ -193,7 +197,7 @@ const App: React.FC = () => {
           </div>
 
           {/* Language Selection and Results */}
-          <div className="col-span-1 lg:col-span-2 flex flex-col gap-6">
+          <div className="col-span-1 lg:col-span-2 flex flex-col gap-6 p-6 rounded-xl shadow-md bg-gradient-to-br from-[#FFFFFF] via-[#E6F7FC] to-[#FDE6E0]">
             <div className="flex flex-col sm:flex-row gap-4">
               <select
                 value={language}
@@ -206,33 +210,54 @@ const App: React.FC = () => {
                   </option>
                 ))}
               </select>
-
               <button
                 onClick={handleIdentify}
                 disabled={isLoading}
-                className={`bg-teal-600 text-white p-3 rounded-lg hover:bg-teal-700 transition-all duration-300 font-medium ${
-                  isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-md'
-                }`}
+                className={`bg-gradient-to-r from-[#E6F7FC] via-[#00AEEF] to-[#C8E6F9] 
+                  text-[#003B57] p-3 rounded-lg font-semibold tracking-wide
+                  transition-all duration-300 shadow-md
+                  ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-lg hover:scale-[1.02]'}`}
               >
-                {isLoading ? 'Analyzing...' : 'Identify Object'}
+               {isLoading ? 'Analyzing...' : 'Identify Image'}
               </button>
+
             </div>
 
             {error && (
-              <div className="p-4 bg-red-900/50 text-red-200 rounded-lg animate-fade-in">
-                <p className="font-medium">{error}</p>
-              </div>
+            <div className="p-4 rounded-lg animate-fade-in bg-gradient-to-r from-[#FDE6E0] to-[#F8B4A0] border-l-4 border-red-500 shadow-md">
+              <p className="font-bold text-red-600">{error}</p>
+            </div>
+           
             )}
 
             {result && !result.error && !result.detail ? (
               <div className="p-6 bg-gray-800 rounded-xl shadow-inner animate-fade-in">
-                <p className="mb-2"><strong className="text-teal-400">English Object Name:</strong> {result.object_name_en || 'N/A'}</p>
-                <p className="mb-2"><strong className="text-teal-400">Translated Object Name:</strong> {result.object_name_translated || 'N/A'} ({result.translated_to || 'N/A'})</p>
-                <p className="mb-2"><strong className="text-teal-400">English Description:</strong> {result.object_description_en || 'N/A'}</p>
-                <p className="mb-2"><strong className="text-teal-400">Translated Description:</strong> {result.object_description_translated || 'N/A'}</p>
-                <p className="mb-2"><strong className="text-teal-400">English Hint:</strong> {result.object_hint_en || 'N/A'}</p>
-                <p className="mb-2"><strong className="text-teal-400">Translated Hint:</strong> {result.object_hint_translated || 'N/A'}</p>
-              </div>
+              <p className="mb-2">
+                <strong className="text-teal-400">English Object Name:</strong>{' '}
+                <span className="text-white">{result.object_name_en || 'N/A'}</span>
+              </p>
+              <p className="mb-2">
+                <strong className="text-teal-400">Translated Object Name:</strong>{' '}
+                <span className="text-white">{result.object_name_translated || 'N/A'}</span>{' '}
+                (<span className="text-white">{result.translated_to || 'N/A'}</span>)
+              </p>
+              <p className="mb-2">
+                <strong className="text-teal-400">English Description:</strong>{' '}
+                <span className="text-white">{result.object_description_en || 'N/A'}</span>
+              </p>
+              <p className="mb-2">
+                <strong className="text-teal-400">Translated Description:</strong>{' '}
+                <span className="text-white">{result.object_description_translated || 'N/A'}</span>
+              </p>
+              <p className="mb-2">
+                <strong className="text-teal-400">English Hint:</strong>{' '}
+                <span className="text-white">{result.object_hint_en || 'N/A'}</span>
+              </p>
+              <p className="mb-2">
+                <strong className="text-teal-400">Translated Hint:</strong>{' '}
+                <span className="text-white">{result.object_hint_translated || 'N/A'}</span>
+              </p>
+            </div>
             ) : result && (result.error || result.detail) ? (
               <div className="p-4 bg-red-900/50 text-red-200 rounded-lg animate-fade-in">
                 <p className="font-medium"><strong>Error:</strong> {result.error || result.detail || 'Unknown error'}</p>
@@ -240,7 +265,7 @@ const App: React.FC = () => {
                 <p><strong>Exception:</strong> {result.exception || 'N/A'}</p>
               </div>
             ) : (
-              <p className="text-gray-500">Click 'Identify Object' to see results.</p>
+              <p className="text-black-500">Click 'Identify Image' to see results.</p>
             )}
           </div>
         </div>
