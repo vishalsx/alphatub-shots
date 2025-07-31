@@ -172,8 +172,8 @@ const App: React.FC = () => {
               onClick={handleClick}
             >
             <p className="text-4xl font-extrabold tracking-wide text-[#00AEEF] drop-shadow-[0_0_8px_rgba(0,174,239,0.6)]">
-              Take <span className="text-[#F15A29] drop-shadow-[0_0_8px_rgba(241,90,41,0.6)]">Tub</span>
-              <span className="text-[#00AEEF]">Shot</span>
+              Take <span className="text-[#F15A29] drop-shadow-[0_0_8px_rgba(241,90,41,0.6)]">TUB</span>
+              <span className="text-[#00AEEF]"> Shot</span>
             </p>
               <p className="text-sm text-gray-400 mt-1">
                 Drag and drop an image or click to upload 
