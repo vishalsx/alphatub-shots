@@ -30,7 +30,7 @@ const App: React.FC = () => {
 
   const languageOptions = [
     'Hindi', 'Punjabi', 'Khasi', 'Garo', 'Marathi', 'Kokborok', 'Gujrati', 'Bengali', 'Tamil', 'Telugu',
-    'Spanish', 'French', 'German', 'Vietnamese', 'Japanese'
+    'Spanish', 'French', 'German', 'Vietnamese', 'Japanese', 'Urdu', 'Arabic'
   ];
 
   useEffect(() => {
