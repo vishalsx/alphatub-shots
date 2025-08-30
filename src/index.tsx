@@ -75,7 +75,8 @@ const App: React.FC = () => {
     object_name_en_base: ''
   });
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  // const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [saveMessages, setSaveMessages] = useState<{ [key: string]: string | null }>({});
   const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({});
   const [saveStatus, setSaveStatus] = useState<{ [key: string]: 'unsaved' | 'saved' }>({});
   const [imageHash, setImageHash] = useState<string | null>(null);
@@ -222,7 +223,9 @@ const App: React.FC = () => {
     if (!file || !languageResults[currentTab]) return;
   
     setIsSaving(true);
-    setSaveMessage(null);
+    // setSaveMessage(null);
+    setSaveMessages(prev => ({ ...prev, [currentTab]: null }));
+    
   
     try {
       // Prepare data for current tab only
@@ -288,10 +291,20 @@ const App: React.FC = () => {
       // Mark current tab as saved and exit edit mode
       setSaveStatus(prev => ({ ...prev, [currentTab]: 'saved' }));
       setIsEditing(prev => ({ ...prev, [currentTab]: false }));
-      setSaveMessage(`${currentTab} data saved successfully!`);
+      // setSaveMessage(`${currentTab} data saved successfully!`);
+      setSaveMessages(prev => ({ 
+        ...prev, 
+        [currentTab]: `${currentTab} data saved successfully!` 
+      }));
+      
       
     } catch (err) {
-      setSaveMessage(`Error saving ${currentTab}: ${(err as Error).message}`);
+      // setSaveMessage(`Error saving ${currentTab}: ${(err as Error).message}`);
+      setSaveMessages(prev => ({ 
+        ...prev, 
+        [currentTab]: `Error saving ${currentTab}: ${(err as Error).message}` 
+      }));
+
     } finally {
       setIsSaving(false);
     }
@@ -308,7 +321,11 @@ const App: React.FC = () => {
   const handleClick = () => fileInputRef.current?.click();
 
   const handleIdentify = async () => {
-    setSaveMessage(null);
+    // setSaveMessage(null);
+    setSaveMessages({});
+    setIsLanguageDropdownOpen(false);   // 👈 collapse the dropdown
+
+
     if (!file) {
       setError('Please upload an image first.');
       return;
@@ -538,11 +555,11 @@ const App: React.FC = () => {
         </div>
       </header>
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1 sm:py-2">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           
           {/* LEFT PANEL: Image Upload + Category + Tags */}
-          <div className="col-span-1 flex flex-col items-center bg-gradient-to-br from-[#FFFFFF] via-[#E6F7FC] to-[#FDE6E0] p-6 rounded-xl shadow-md">
+          <div className="col-span-1 flex flex-col items-center bg-gradient-to-br from-[#BBBBBB] via-[#E6F7FC] to-[#FDE6E0] p-6 rounded-xl shadow-md">
             <div
               className="border-2 border-dashed border-teal-500 p-6 text-center bg-gray-800 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors duration-300 w-full"
               onDragOver={(e) => e.preventDefault()}
@@ -569,10 +586,19 @@ const App: React.FC = () => {
             
             {/* Object Category and Tags - Only show if English tab is active or if data exists */}
             {Object.keys(languageResults).length > 0 && (
-              <div className="w-full mt-4 space-y-4 bg-gray-800 rounded-xl p-4 shadow-inner">
+            <div className="w-full mt-4 bg-gray-800 rounded-xl p-4 shadow-inner">
+            {languageResults['English']?.isLoading ? (
+              <div className="flex items-center justify-center py-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-5 h-5 border-2 border-gray-400 border-t-[#00AEEF] rounded-full animate-spin"></div>
+                  <span className="text-gray-300">Loading English translation...</span>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
                 <div>
                   <label className="block text-teal-400 font-semibold mb-1">Object Category:</label>
-                  {isEditing['English'] && activeTab === 'English' && !isDatabaseView['English']? (
+                  {isEditing['English'] && activeTab === 'English' && !isDatabaseView['English'] ? (
                     <input
                       type="text"
                       value={commonData.object_category || ''}
@@ -595,7 +621,7 @@ const App: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-teal-400 font-semibold mb-1">Tags:</label>
-                  {isEditing['English'] && activeTab === 'English' && !isDatabaseView['English']? (
+                  {isEditing['English'] && activeTab === 'English' && !isDatabaseView['English'] ? (
                     <input
                       type="text"
                       value={commonData.tags ? commonData.tags.join(', ') : ''}
@@ -618,10 +644,13 @@ const App: React.FC = () => {
                 </div>
               </div>
             )}
+            </div>
+
+            )}
           </div>
 
           {/* RIGHT PANEL: Multi-Language Selection + Tabbed Results */}
-          <div className="col-span-1 lg:col-span-2 flex flex-col gap-6 p-6 rounded-xl shadow-md bg-gradient-to-br from-[#FFFFFF] via-[#E6F7FC] to-[#FDE6E0]">
+          <div className="col-span-1 lg:col-span-2 flex flex-col gap-6 p-6 rounded-xl shadow-md bg-gradient-to-br from-[#BBBBBB] via-[#E6F7FC] to-[#FDE6E0]">
             
             {/* Language Multi-Select and Identify Button */}
             <div className="flex flex-col sm:flex-row gap-4">
@@ -841,9 +870,9 @@ const App: React.FC = () => {
                         </>
                       )}
 
-                      {saveMessage && (
-                        <p className={`mt-2 text-sm ${saveMessage.includes('Error') ? 'text-red-300' : 'text-green-300'}`}>
-                          {saveMessage}
+                      {saveMessages[activeTab] && (
+                        <p className={`mt-2 text-sm ${saveMessages[activeTab]?.includes('Error') ? 'text-red-300' : 'text-green-300'}`}>
+                          {saveMessages[activeTab]}
                         </p>
                       )}
                     </div>
